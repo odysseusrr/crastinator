@@ -297,7 +297,7 @@
         <div class="label-title">Gain de temps souhaité</div>
 
         <div class="slider">
-            <input id="time" type="range" min="0" max="2" value="0" oninput="updateLabels()">
+            <input id="time" type="range" min="0" max="3" value="0" oninput="updateLabels()">
         </div>
 
         <p id="timeLabel"></p>
@@ -327,6 +327,7 @@
 let isRunning = false;
 
 const TIMES_TEXT = [
+    "5 secondes", // 0
     "5 heures",   // bas
     "5 jours",    // milieu
     "5 semaines"  // haut
@@ -338,7 +339,9 @@ const PROJECTS_TEXT = [
     "Vital"         // haut
 ];
 
+const TIME_COUNT = TIMES_TEXT.length;
 
+document.getElementById("time").max = TIME_COUNT - 1;
 
 // met à jour les labels
 
