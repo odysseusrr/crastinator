@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, jsonify, request
+from Flask import Flask, render_template, jsonify, request
 import random
 import json
 
@@ -48,7 +48,7 @@ state_lock = Lock()
 import time
 
 def compute_mood():
-    
+    with state_lock:
 
         # =====================
         # 1. BASE (score long terme)
@@ -107,7 +107,7 @@ def compute_mood():
 
         # drift très léger uniquement
         if len(state["mood_history"]) >= 10:
-            state["mood_raw"] = state["mood_raw"] * 0.95 + avg_mood * 0.05
+            smoothed = state["mood_raw"] * 0.95 + avg_mood * 0.05
             state["mood_raw"] = max(0, min(3, smoothed))
 
         state["mood_raw"] = float(state["mood_raw"])
@@ -183,6 +183,8 @@ def get_phrase(time_value, project):
     with state_lock:
         if delta is not None:
             state["click_intervals"].append(min(delta, 30))
+            if len(state["click_intervals"]) > 20:
+                state["click_intervals"].pop(0)
         
         state["score"] += 1
         
@@ -248,5 +250,4 @@ def reload_db():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    app.run()
