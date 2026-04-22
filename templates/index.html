@@ -59,11 +59,14 @@
         input[type=range] {
             -webkit-appearance: none;
             appearance: none;
+            writing-mode: vertical-lr;   /* 🔥 clé moderne */
+            direction: rtl;              /* inverse sens */
 
-            width: min(240px, 60vw);  /* 👈 hauteur des barres */
-            height: 10px;
+            height: 210px;
+            width: min(40px, 10vw);  /* 👈 hauteur des barres */
+            
 
-            transform: rotate(-90deg);
+            
 
             background: #0f0;
             box-shadow: 0 0 6px #0f0
@@ -71,7 +74,8 @@
 
         /* ===== TRACK (la barre) ===== */
         input[type=range]::-webkit-slider-runnable-track {
-            height: 4px;
+            width: 4px;
+            height: 100%;
             background: linear-gradient(to right, #0ff, #09f);
             border-radius: 2px;
 
@@ -83,7 +87,6 @@
 
         /* curseur */
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
 
             width: 26px;
             height: 26px;
@@ -98,7 +101,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 110px;    /* 👈 hauteur de la barre de slide */
+            height: 260px;    /* 👈 hauteur de la barre de slide */
             margin-top: 2px;
 
         }
@@ -115,7 +118,8 @@
         }
 
         input[type=range]::-moz-range-track {
-            height: 4px;
+            width: 4px;
+            height: 100%;
             background: #0af;
             border-radius: 2px;
 
