@@ -6,6 +6,8 @@
     
     <meta name="theme-color" content="#111">
 
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+
     <link rel="manifest" href="/static/manifest.json">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -21,8 +23,10 @@
                 font-size: 14px;
                 min-height: 32px;
             }
-            h1 {
+            h1 {   /*  titre  */
                 font-size: 22px;
+                letter-spacing: 16px;
+                text-transform: uppercase;
                 text-align: center;
             }
 
@@ -43,14 +47,15 @@
             margin: 0;
             background: #111;
             color: white;
-            font-family: Arial;
+            font-family: "Orbitron", sans-serif;
+            letter-spacing: 2px;  /* tout le texte affiché */
 
             display: flex;
             flex-direction: column;
             align-items: center;
 
             justify-content: flex-start; /* 👈 IMPORTANT */
-            padding-top: 30px;
+            padding-top: 20px;
             min-height: 100vh;
         }
 
@@ -132,6 +137,7 @@
         button {
             font-size: 26px;
             padding: 15px 30px;
+            letter-spacing: 2px;
 
             border: none;
             border-radius: 15px;
@@ -157,9 +163,9 @@
                 0 4px 10px rgba(0,0,0,0.4);
         }
 
-        #output {
+        #output {   /* affichage phrase */
             margin-top:30px;
-            font-size:34px;
+            font-size: clamp(18px, 4vw, 34px);  /* taille de la phrase affichée */
             text-align:center;
 
             max-width: 90%;
@@ -283,6 +289,7 @@
 <body>
 
 <h1>CRASTINATEUR 2000</h1>
+<h1>Pro v4.2.1</h1>
 
 <div class="row">
 
