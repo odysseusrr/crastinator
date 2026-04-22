@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CRASTINATEUR 2000</title>
+    
+    <meta name="theme-color" content="#111">
+
+    <link rel="manifest" href="/static/manifest.json">
+
+
+    <style>
+        body {
+            margin: 0;
+            background: #111;
+            color: white;
+            font-family: Arial;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            justify-content: flex-start; /* 👈 IMPORTANT */
+            padding-top: 60px;
+            min-height: 100vh;
+        }
+
+
+        .slider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 280px;
+        }
+        
+        /* SLIDER GLOBAL */
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+
+            width: 280px;
+            height: 10px;
+
+            transform: rotate(-90deg);
+
+            background: #0f0;
+            box-shadow: 0 0 6px #0f0
+        }
+
+        /* ===== TRACK (la barre) ===== */
+        input[type=range]::-webkit-slider-runnable-track {
+            height: 4px;
+            background: linear-gradient(to right, #0ff, #09f);
+            border-radius: 2px;
+
+            box-shadow:
+                0 0 5px #0ff,
+                0 0 10px #0af,
+                0 0 20px #09f;
+        }
+
+        /* curseur */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+
+            width: 26px;
+            height: 26px;
+            background: #fff;
+            border: 2px solid #000;   /* 👈 contraste */
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Firefox */
+        input[type=range]::-moz-range-thumb {
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #000;
+        }
+
+        input[type=range]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            touch-action: none;
+        }
+
+        input[type=range]::-moz-range-track {
+            height: 4px;
+            background: #0af;
+            border-radius: 2px;
+
+            box-shadow:
+                0 0 4px #0af,
+                0 0 8px #0af,
+                0 0 12px #09f;
+        }
+
+        button {
+            font-size: 26px;
+            padding: 15px 30px;
+
+            border: none;
+            border-radius: 15px;
+
+            background: #2b2b2b;
+            color: white;
+
+            cursor: pointer;
+
+            /* 🔥 effet 3D */
+            box-shadow:
+                0 6px 0 #111,
+                0 10px 15px rgba(0,0,0,0.5);
+
+            transition: all 0.1s ease;
+            transform: translateY(0);
+        }
+
+        button:active {
+            transform: translateY(6px);
+            box-shadow:
+                0 0 0 #111,
+                0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        #output {
+            margin-top:30px;
+            font-size:34px;
+            text-align:center;
+
+            max-width: 90%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .loading {
+            width:300px;
+            height:20px;
+            background:#222;
+            margin-top:20px;
+        }
+
+        .bar {
+            height:100%;
+            width:0%;
+            background:green;
+        }
+
+
+        .row {
+            display: flex;
+            gap: 10px;
+            margin: 30px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .row > div {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .labels {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        #timeLabel, #projectLabel {
+            height: 24px;
+            min-width: 140px;
+            display: block;
+            text-align: center;
+            white-space: nowrap;
+            font-size: 26px;
+        }
+
+        .label-title {
+            margin-bottom: 15px;
+            font-size: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #0ff;
+
+            text-shadow:
+                0 0 4px #0ff,
+                0 0 8px #09f;
+        }
+
+        
+        .control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: translateY(0) !important;
+            box-shadow:
+                0 6px 0 #111,
+                0 10px 15px rgba(0,0,0,0.5);
+        }
+
+        
+    </style>
+</head>
+
+
+
+
+<body>
+
+<h1>CRASTINATEUR 2000</h1>
+
+<div class="row">
+
+    <div class="control">
+        <div class="label-title">Durée du report</div>
+
+        <div class="slider">
+            <input id="time" type="range" min="0" max="2" value="0" oninput="updateLabels()">
+        </div>
+
+        <p id="timeLabel"></p>
+    </div>
+
+    <div class="control">
+        <div class="label-title">Importance du projet</div>
+
+        <div class="slider">
+            <input id="project" type="range" min="0" max="2" value="0" oninput="updateLabels()">
+        </div>
+
+        <p id="projectLabel"></p>
+    </div>
+
+</div>
+
+<button id="startBtn" onclick="start()">START</button>
+
+<div class="loading">
+    <div class="bar" id="bar"></div>
+</div>
+
+<p id="output"></p>
+
+<script>
+let isRunning = false;
+
+const TIMES_TEXT = [
+    "5 heures",   // bas
+    "5 jours",    // milieu
+    "5 semaines"  // haut
+];
+
+const PROJECTS_TEXT = [
+    "Intéressant", // bas
+    "Important",    // milieu
+    "Vital"         // haut
+];
+
+
+
+// met à jour les labels
+
+function displayText(text) {
+    document.getElementById("output").innerText = text;
+}
+
+
+function updateLabels() {
+    const time = document.getElementById("time").value;
+    const project = document.getElementById("project").value;
+
+    document.getElementById("timeLabel").innerText = TIMES_TEXT[time];
+    document.getElementById("projectLabel").innerText = PROJECTS_TEXT[project];
+}
+
+// barre de chargement
+
+function animateBar(duration) {
+    return new Promise((resolve) => {
+        const bar = document.getElementById("bar");
+        let start = Date.now();
+
+        function step() {
+            let progress = (Date.now() - start) / duration;
+            progress = Math.min(progress, 1);
+
+            bar.style.width = (progress * 100) + "%";
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                resolve();
+            }
+        }
+
+        step();
+    });
+}
+
+
+// bouton START
+
+async function start() {
+    if (isRunning) return;
+
+    isRunning = true;
+
+    const btn = document.getElementById("startBtn");
+    btn.disabled = true; // 🔒 bloque UI
+
+    document.getElementById("output").innerText = "";
+
+    const bar = document.getElementById("bar");
+    bar.style.width = "0%";
+
+    try {
+        
+        let time = parseInt(document.getElementById("time").value);
+        let project = parseInt(document.getElementById("project").value);
+
+        let response = await fetch("/api/start", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ time, project })
+        });
+
+        let data = await response.json();
+
+
+        // durée dynamique basée sur le score
+        let duration = 1000 + (data.score * 100);
+
+        // animation APRES réponse
+        await animateBar(duration);
+
+        displayText(data.text);
+
+    } catch (err) {
+        console.log(err);
+        document.getElementById("output").innerText = "ERREUR API";
+    }
+
+    isRunning = false;
+    btn.disabled = false; // 🔓 réactive bouton
+}
+
+// init au chargement
+document.addEventListener("DOMContentLoaded", () => {
+    updateLabels();
+});
+</script>
+
+
+</body>
+</html>
