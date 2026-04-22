@@ -8,8 +8,29 @@
 
     <link rel="manifest" href="/static/manifest.json">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
     <style>
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 22px;
+                text-align: center;
+            }
+
+            #output {
+                font-size: 22px;
+                padding: 10px;
+            }
+
+            button {
+                font-size: 20px;
+                padding: 12px 20px;
+            }
+        }
+
+
+
         body {
             margin: 0;
             background: #111;
@@ -38,7 +59,7 @@
             -webkit-appearance: none;
             appearance: none;
 
-            width: 280px;
+            width: min(280px, 70vw);
             height: 10px;
 
             transform: rotate(-90deg);
@@ -71,16 +92,13 @@
             cursor: pointer;
         }
 
-        /* Firefox */
-        input[type=range]::-moz-range-thumb {
-            width: 26px;
-            height: 26px;
-            background: white;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid #000;
+        .slider {
+            touch-action: none;
         }
 
+        /* Firefox */
+
+        
         input[type=range]::-moz-range-thumb {
             width: 22px;
             height: 22px;
@@ -151,13 +169,21 @@
             background:green;
         }
 
-
-        .row {
+        /* .row {
             display: flex;
             gap: 10px;
             margin: 30px;
             justify-content: center;
             align-items: flex-start;
+        } */
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px;
+            justify-content: center;
+            align-items: center;
         }
 
         .row > div {
@@ -209,6 +235,15 @@
             box-shadow:
                 0 6px 0 #111,
                 0 10px 15px rgba(0,0,0,0.5);
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         
@@ -343,7 +378,7 @@ async function start() {
 
 
         // durée dynamique basée sur le score
-        let duration = 1000 + (data.score * 100);
+        let duration = Math.min(5000, 1000 + (data.score * 100));
 
         // animation APRES réponse
         await animateBar(duration);
