@@ -1,5 +1,5 @@
 import os
-from Flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request
 import random
 import json
 
