@@ -48,7 +48,7 @@ state_lock = Lock()
 import time
 
 def compute_mood():
-    with state_lock:
+    
 
         # =====================
         # 1. BASE (score long terme)
