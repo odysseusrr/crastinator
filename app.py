@@ -21,6 +21,7 @@ PHRASES_DB = load_db()
 # ================= TON SYSTÈME (inchangé logique)
 
 TIMES = [
+    5,        # 5 secondes
     18000,    # 5 heures
     432000,   # 5 jours
     3024000   # 5 semaines
