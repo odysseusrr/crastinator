@@ -50,7 +50,7 @@
             align-items: center;
 
             justify-content: flex-start; /* 👈 IMPORTANT */
-            padding-top: 60px;
+            padding-top: 30px;
             min-height: 100vh;
         }
 
@@ -229,17 +229,19 @@
         }
 
         .label-title {
-            margin-bottom: 15px;
-            word-break: break-word;
-            max-width: 100%;
-            font-size: 20px;
-            margin-bottom: 10px;
-            text-align: center;
-            color: #0ff;
-            padding: 0 4px;
-            line-height: 1.2;
-            min-height: 40px; /* 👈 clé du problème */
+            display: flex;
+            align-items: flex-end;   /* 👈 clé */
+            justify-content: center;
 
+            min-height: 48px;       /* réserve 2 lignes */
+            padding: 0 4px;
+
+            font-size: 20px;
+            line-height: 1.2;
+            text-align: center;
+            word-break: break-word;
+
+            color: #0ff;
             text-shadow:
                 0 0 4px #0ff,
                 0 0 8px #09f;
