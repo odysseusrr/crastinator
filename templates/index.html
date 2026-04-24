@@ -521,7 +521,7 @@ async function start() {
 
     try {
         
-        let time = 3 - parseInt(document.getElementById("time").value);
+        let time = parseInt(document.getElementById("time").value);
         let project = parseInt(document.getElementById("project").value);
 
         let response = await fetch("/api/start", {
@@ -655,7 +655,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <h2>INSTRUCTIONS</h2>
 
     <p>
-        Ce terminal permet de compresser le continuum temps pour gagner du temps.<br><br>
+        Ce terminal compresse le continuum temps pour gagner du temps.<br><br>
 
         1. Choisis le temps que tu veux gagner<br>
         2. Choisis l'enjeu de ton projet en cours<br>
