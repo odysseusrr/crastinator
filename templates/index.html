@@ -129,6 +129,7 @@
         input[type=range]::-moz-range-track {
             height: 4px;
             background: #09f;
+            touch-action: none;
         }
 
         input[type=range]::-moz-range-thumb {
@@ -356,6 +357,9 @@
             max-width: 600px;
             line-height: 2;
             font-size: 18px;
+            overflow-y: auto;   /* 👈 scroll vertical autorisé */
+            -webkit-overflow-scrolling: touch; /* 👈 inertie iOS/Android */
+            padding-bottom: 40px;
             margin: 20px;
             text-align: left;   /* plus lisible qu’un bloc centré */
         }
