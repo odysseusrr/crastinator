@@ -64,37 +64,32 @@
         /* SLIDER GLOBAL */
         
         .slider {
-            touch-action: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 260px;    /* 👈 hauteur de la barre de slide */
-            margin-top: 2px;
-
+            height: 260px;
         }
+
         
+        /* slider fiable */
         input[type=range] {
             -webkit-appearance: none;
             appearance: none;
-            writing-mode: vertical-lr;   /* 🔥 clé moderne */
-            direction: rtl;              /* inverse sens */
 
-            height: 210px;
-            width: 10px;  /* 👈 epaisseur des barres */
-            
-            display: block;
-            margin: 0 auto; /*  FORCE centrage */
+            width: 210px;   /* longueur */
+            height: 26px;   /* épaisseur */
 
-            background: #0f0;
-            box-shadow: 0 0 6px #0f0
+            transform: rotate(-90deg);
+
+            background: transparent;
         }
 
         /* ===== TRACK (la barre) ===== */
         input[type=range]::-webkit-slider-runnable-track {
-            width: 4px;
-            height: 100%;
+            height: 4px;
             background: linear-gradient(to right, #0ff, #09f);
             border-radius: 2px;
+        }
 
             box-shadow:
                 0 0 5px #0ff,
@@ -104,15 +99,16 @@
 
         /* curseur */
         input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
 
             width: 26px;
             height: 26px;
-            background: #fff;
-            border: 2px solid #000;   /* 👈 contraste */
             border-radius: 50%;
+            background: white;
+            border: 2px solid black;
             cursor: pointer;
-            margin-left: -11px; /* 👈 compense le décalage */
 
+            margin-top: -11px; /* centre vertical */
         }
 
         
@@ -120,20 +116,18 @@
         /* Firefox */
 
         
-        input[type=range]::-moz-range-thumb {
-            width: 22px;
-            height: 22px;
-            background: white;
-            border-radius: 50%;
-            touch-action: none;
+        input[type=range]::-moz-range-track {
+            height: 4px;
+            background: #09f;
         }
 
-        input[type=range]::-moz-range-track {
-            width: 4px;
-            height: 100%;
-            background: #0af;
-            border-radius: 2px;
-
+        input[type=range]::-moz-range-thumb {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid black;
+        
             box-shadow:
                 0 0 4px #0af,
                 0 0 8px #0af,
@@ -504,7 +498,7 @@ async function start() {
 
     try {
         
-        let time = parseInt(document.getElementById("time").value);
+        let time = 3 - parseInt(document.getElementById("time").value);
         let project = parseInt(document.getElementById("project").value);
 
         let response = await fetch("/api/start", {
