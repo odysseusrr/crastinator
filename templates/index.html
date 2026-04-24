@@ -62,6 +62,17 @@
 
         
         /* SLIDER GLOBAL */
+        
+        .slider {
+            touch-action: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 260px;    /* 👈 hauteur de la barre de slide */
+            margin-top: 2px;
+
+        }
+        
         input[type=range] {
             -webkit-appearance: none;
             appearance: none;
@@ -69,10 +80,10 @@
             direction: rtl;              /* inverse sens */
 
             height: 210px;
-            width: min(10px, 20vw);  /* 👈 epaisseur des barres */
+            width: 10px;  /* 👈 epaisseur des barres */
             
-
-            
+            display: block;
+            margin: 0 auto; /*  FORCE centrage */
 
             background: #0f0;
             box-shadow: 0 0 6px #0f0
@@ -102,15 +113,7 @@
             cursor: pointer;
         }
 
-        .slider {
-            touch-action: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 260px;    /* 👈 hauteur de la barre de slide */
-            margin-top: 2px;
-
-        }
+        
 
         /* Firefox */
 
