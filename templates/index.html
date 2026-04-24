@@ -329,8 +329,9 @@
 
         html, body {
             width: 100%;
-            overflow-x: hidden;
-            position: fixed;
+            height: 100%;
+            overflow: hidden;   /* OK on bloque scroll global */
+            position: relative;  /* 👈 IMPORTANT: PAS fixed */
         }
 
         * {
@@ -361,8 +362,10 @@
             -webkit-overflow-scrolling: touch; /* 👈 inertie iOS/Android */
             padding-bottom: 40px;
             margin: 20px;
-            text-align: left;   /* plus lisible qu’un bloc centré */
-            justify-content: flex-start; 
+            text-align: left;   /* plus lisible qu’un bloc centré */ 
+            height: 100vh;      /* 👈 CRUCIAL */
+            display: block;     /* 👈 évite flex bug implicite */
+            justify-content: flex-start;
         }
 
         .screen {
