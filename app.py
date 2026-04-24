@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, jsonify, request
 import random
 import json
+import time
 
 app = Flask(__name__)
 
@@ -39,7 +40,8 @@ state = {
     "click_intervals": [],
     "last_click_time": 0,
     "mood_history": [],
-    "mood_raw": 0
+    "mood_raw": 0,
+    "last_decay": time.time()
 }
 from threading import Lock
 state_lock = Lock()
@@ -55,7 +57,7 @@ def compute_mood():
         # 1. BASE (score long terme)
         # =====================
         s = state["score"]
-        t = min(s / 100, 1.0)
+        t = min(s / 10, 1.0)
 
         if t < 0.3:
             mood = 0
@@ -72,9 +74,9 @@ def compute_mood():
         if len(state["click_intervals"]) >= 3:
             avg = sum(state["click_intervals"]) / len(state["click_intervals"])
 
-            if avg < 2:
+            if avg < 5:
                 mood += 1      # spam = agressif
-            elif avg > 10:
+            elif avg > 15:
                 mood -= 1      # lenteur = calme
 
         # =====================
@@ -84,9 +86,9 @@ def compute_mood():
         last = state.get("last_click_time", 0)
         idle = now - last if last else 999
 
-        if idle > 120:
+        if idle > 60:
             mood -= 2
-        elif idle > 30:
+        elif idle > 10:
             mood -= 1
 
         # clamp final
@@ -108,7 +110,7 @@ def compute_mood():
 
         # drift très léger uniquement
         if len(state["mood_history"]) >= 10:
-            smoothed = state["mood_raw"] * 0.95 + avg_mood * 0.05
+            smoothed = state["mood_raw"] * 0.6 + avg_mood * 0.4
             state["mood_raw"] = max(0, min(3, smoothed))
 
         state["mood_raw"] = float(state["mood_raw"])
@@ -120,12 +122,24 @@ def compute_mood():
 # ================= AVOID REPETITION
 
 def avoid_repeat(phrases):
-    filtered = [p for p in phrases if p[1] not in state["last_phrases"]]
+    weighted = []      # rareté des phrases  common/rare
+
+    for rarity, text in phrases:
+        if rarity == "common":
+            weight = 5
+        elif rarity == "rare":
+            weight = 1
+        else:
+            weight = 1
+
+        weighted.extend([text] * weight)
+
+    filtered = [p for p in weighted if p not in state["last_phrases"]]
 
     if not filtered:
-        filtered = phrases
+        filtered = weighted
 
-    choice = random.choice(filtered)[1]
+    choice = random.choice(filtered)
 
     state["last_phrases"].append(choice)
 
@@ -160,12 +174,15 @@ def get_phrase(time_value, project):
 
     # niveau temps correct
 
-    if time_value <= 18000:
+    if time_value <= 10:
+        t_level = "ultra_short"
+    elif time_value <= 18000:
         t_level = "short"
     elif time_value <= 432000:
         t_level = "medium"
     else:
         t_level = "long"
+
 
 
 
@@ -182,12 +199,26 @@ def get_phrase(time_value, project):
     personality = random.choice(mood_map[mood_level])
     
     with state_lock:
+        state["last_click_time"] = time.time()
         if delta is not None:
             state["click_intervals"].append(min(delta, 30))
             if len(state["click_intervals"]) > 20:
                 state["click_intervals"].pop(0)
         
+        now = time.time()
+        elapsed = now - state["last_decay"]
+
+        #  DECAY PLUS LENT + STABLE
+        if elapsed >= 15:   #  toutes les 15 secondes seulement
+            decay_steps = int(elapsed // 15)
+
+            # décroissance douce
+            for _ in range(decay_steps):
+                state["score"] *= 0.995   # très léger decay
+
+        state["last_decay"] = now
         state["score"] += 1
+        
         
         compute_mood()
     
@@ -211,6 +242,7 @@ def get_phrase(time_value, project):
 # ================= API START
 
 @app.route("/api/start", methods=["POST"])
+
 def start():
     data = request.json
 
