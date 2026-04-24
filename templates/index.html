@@ -136,8 +136,6 @@
         }
 
         button {
-            -webkit-tap-highlight-color: transparent;
-            outline: none;
             font-size: 26px;
             padding: 15px 30px;
             letter-spacing: 2px;
@@ -150,20 +148,29 @@
 
             cursor: pointer;
 
-            /* 🔥 effet 3D */
             box-shadow:
                 0 6px 0 #111,
                 0 10px 15px rgba(0,0,0,0.5);
 
-            transition: all 0.1s ease;
-            
+            transform: translateY(0);
+
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+
+            will-change: transform;
+
+            -webkit-tap-highlight-color: transparent;
+            appearance: none;
         }
 
         button:active {
-            transform: translateY(6px) scale(0.98);
+            transform: translateY(8px) scale(0.98);
             box-shadow:
                 0 0 0 #111,
-                0 4px 10px rgba(0,0,0,0.4);
+                0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        button:focus {
+            outline: none;
         }
 
         button:disabled {
