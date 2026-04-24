@@ -57,7 +57,9 @@
 
             justify-content: flex-start; /* 👈 IMPORTANT */
             padding-top: 20px;
-            min-height: 100vh;
+            min-height: 100dvh;
+
+             overflow-y: hidden; /* 🔥 IMPORTANT FIX MOBILE */
         }
 
         
@@ -70,7 +72,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            
+            margin: 10px 0; /*  espace AU-DESSUS et AU-DESSOUS */
         }
 
         
@@ -88,6 +90,9 @@
             transform-origin: center;
 
             background: transparent;
+            margin: 0;
+            padding: 0;
+            touch-action: none; /* 🔥 empêche scroll quand on drag */
         }
 
         /* ===== TRACK (la barre) ===== */
@@ -314,6 +319,9 @@
             min-width: 0;
             padding: 5px;
             gap: 12px;
+
+            min-width: 0;
+            padding: 10px 5px; /* 👈 respiration verticale réelle */
         }
 
 
@@ -340,7 +348,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            min-height: 100dvh;
         }
 
         #instructionsScreen p {
@@ -376,6 +384,7 @@
             width: 100%;
             max-width: 700px;
             justify-items: center;
+            align-items: start; /* 🔥 évite reflow vertical bizarre */
         }
 
         .full-row {
